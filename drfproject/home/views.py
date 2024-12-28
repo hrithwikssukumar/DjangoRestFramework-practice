@@ -16,7 +16,7 @@ def index(request):
     elif request.method == 'POST':
         return Response('This is a POST method')
     elif request.method =='PUT':
-        return Response('THis is a PUT method') 
+        return Response('This is a PUT method') 
 
 
 @api_view(['GET','POST','PUT','PATCH','DELETE'])
@@ -25,32 +25,52 @@ def person(request):
         objperson = Person.objects.all()
         serializer = PersonSerializer(objperson,many = True)
         return Response(serializer.data)
-    elif request.method =='POST':
+
+    elif request.method == 'POST':
         data = request.data
         serializer = PersonSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-    elif request.method =='PUT':
-        data =request.data
-        obj = Person.objects.get(id = data[id])
-        serializer = PersonSerializer(obj,data=data,partial=False)
+            return Response(serializer.data, status=201) 
+        return Response(serializer.errors, status=400)
+
+    elif request.method == 'PUT':
+        data = request.data
+        try:
+            obj = Person.objects.get(id=data['id'])
+        except Person.DoesNotExist:
+            return Response({"error": "Person not found"}, status=404)  # HTTP 404 for not found
+        serializer = PersonSerializer(obj, data=data, partial=False)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-    elif request.method =='PATCH':
-        data =request.data
-        obj = Person.objects.get(id = data[id])
-        serializer = PersonSerializer(obj,data=data,partial=True)
+        return Response(serializer.errors, status=400)
+
+    elif request.method == 'PATCH':
+        data = request.data
+        try:
+            obj = Person.objects.get(id=data['id'])
+        except Person.DoesNotExist:
+            return Response({"error": "Person not found"}, status=404)
+        serializer = PersonSerializer(obj, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data) 
-        return Response(serializer.errors)     
-    else:
-        data =request.data
-        obj = Person.objects.get(id =data[id])
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+   
+    elif request.method == 'DELETE':
+        data = request.data
+        try:
+            obj = Person.objects.get(id = data['id'])
+        except Person.DoesNotExist:
+            raise Http404("Person not found")
         obj.delete()
-        return Response({'message':"Your data is deleted"})
+        return Response({'message': "Your data is deleted"})
+
+    
+  
+
 
     
 
