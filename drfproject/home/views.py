@@ -3,6 +3,23 @@ from rest_framework.response import Response
 from .models import Person
 from .serializer import PersonSerializer
 
+from rest_framework.views import APIView
+from rest_framework import viewsets
+
+
+class ClassPerson(APIView):
+    def get(self,request):
+        objperson = Person.objects.all()
+        serializer = PersonSerializer(objperson,many = True)
+        return Response(serializer.data)
+    def post(self,request):
+        data = request.data
+        serializer = PersonSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201) 
+        return Response(serializer.errors, status=400)   
+
 @api_view(['GET','POST','PUT'])
 def index(request):
     if request.method == 'GET':
@@ -69,7 +86,18 @@ def person(request):
         return Response({'message': "Your data is deleted"})
 
     
-  
+class PersonViewSets(viewsets.ModelViewSet):
+    serializer_class = PersonSerializer
+    queryset = Person.objects.all()  
+
+    def list(self,request):
+        search = request.GET.get("search")
+        queryset = self.queryset
+
+        if search:
+            queryset =queryset.filter(name__startswith =search)
+        serializer = PersonSerializer(queryset,many=True)
+        return Response({'status':200,'data':serializer.data})    
 
 
     
