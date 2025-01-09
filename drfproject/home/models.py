@@ -8,7 +8,6 @@ class Team(models.Model):
     def __str__(self):
         return self.team_name
     
-
 class Person(models.Model):
     team =models.ForeignKey(Team,blank=True,null=True, on_delete=models.CASCADE,related_name ="members",default=None)
     name = models.CharField(max_length=100)

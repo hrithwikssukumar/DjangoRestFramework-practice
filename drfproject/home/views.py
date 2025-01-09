@@ -56,7 +56,7 @@ def person(request):
         try:
             obj = Person.objects.get(id=data['id'])
         except Person.DoesNotExist:
-            return Response({"error": "Person not found"}, status=404)  # HTTP 404 for not found
+            return Response({"error": "Person not found"}, status=404)  
         serializer = PersonSerializer(obj, data=data, partial=False)
         if serializer.is_valid():
             serializer.save()
@@ -75,7 +75,6 @@ def person(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
-   
     elif request.method == 'DELETE':
         data = request.data
         try:
@@ -93,7 +92,6 @@ class PersonViewSets(viewsets.ModelViewSet):
     def list(self,request):
         search = request.GET.get("search")
         queryset = self.queryset
-
         if search:
             queryset =queryset.filter(name__startswith =search)
         serializer = PersonSerializer(queryset,many=True)
