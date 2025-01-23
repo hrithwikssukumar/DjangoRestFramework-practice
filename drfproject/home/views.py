@@ -19,7 +19,7 @@ class ClassPerson(APIView):
             serializer.save()
             return Response(serializer.data, status=201) 
         return Response(serializer.errors, status=400)   
-
+        
 @api_view(['GET','POST','PUT'])
 def index(request):
     if request.method == 'GET':

@@ -18,7 +18,6 @@ class PersonSerializer(serializers.ModelSerializer):
         fields ='__all__'
         depth  = 1
 
-
     def get_team_info(self,obj):
         return "extra field"    
 
