@@ -8,10 +8,12 @@ from rest_framework import viewsets
 
 
 class ClassPerson(APIView):
+    
     def get(self,request):
         objperson = Person.objects.all()
         serializer = PersonSerializer(objperson,many = True)
         return Response(serializer.data)
+
     def post(self,request):
         data = request.data
         serializer = PersonSerializer(data=data)

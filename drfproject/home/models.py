@@ -14,3 +14,5 @@ class Person(models.Model):
     age  = models.IntegerField()
     designation = models.CharField(max_length=100)
 
+    
+
