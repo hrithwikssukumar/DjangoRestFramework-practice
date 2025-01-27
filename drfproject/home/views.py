@@ -1,7 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Person
-from .serializer import PersonSerializer
+from .serializer import PersonSerializer,RegisterSerializer
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 from rest_framework.views import APIView
 from rest_framework import viewsets
@@ -98,6 +100,20 @@ class PersonViewSets(viewsets.ModelViewSet):
             queryset =queryset.filter(name__startswith =search)
         serializer = PersonSerializer(queryset,many=True)
         return Response({'status':200,'data':serializer.data})    
+
+
+
+class RegisterAPI(APIView):
+
+    def post(self,request):
+        _data = request.data 
+        serializer = RegisterSerializer(data=_data)
+
+        if not serializer.is_valid():
+            return Response({'message':serializer.errors},status=status.HTTP_404_NOT_FOUND)
+        serializer.save()
+        return Response({'message':'User created'},status=status.HTTP_201_CREATED)    
+
 
 
     

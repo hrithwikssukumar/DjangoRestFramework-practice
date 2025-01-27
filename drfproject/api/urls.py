@@ -1,5 +1,5 @@
 from django.urls import path,include
-from home.views import index,person,ClassPerson,PersonViewSets
+from home.views import index,person,ClassPerson,PersonViewSets,RegisterAPI
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -11,5 +11,6 @@ urlpatterns = [
     path('',include(router.urls)),
     path('index/', index,name='index'),
     path('person/',person,name='person'),
-    path('classperson/',ClassPerson.as_view(),name='classperson')
+    path('classperson/',ClassPerson.as_view(),name='classperson'),
+    path('register/',RegisterAPI.as_view(),name='register')
 ]
