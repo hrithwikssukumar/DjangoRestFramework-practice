@@ -1,9 +1,10 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Person
-from .serializer import PersonSerializer,RegisterSerializer
+from .serializer import PersonSerializer,RegisterSerializer,LoginSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
 from rest_framework import viewsets
@@ -112,7 +113,26 @@ class RegisterAPI(APIView):
         if not serializer.is_valid():
             return Response({'message':serializer.errors},status=status.HTTP_404_NOT_FOUND)
         serializer.save()
-        return Response({'message':'User created'},status=status.HTTP_201_CREATED)    
+        return Response({'message':'User created'},status=status.HTTP_201_CREATED)  
+
+
+class LoginAPI(APIView):
+
+    def post(self,request):
+        _data = request.data
+        serializer = LoginSerializer(data=_data)
+
+        if not serializer.is_valid():
+            return Response({'message':serializer.errors},status=status.HTTP_404_NOT_FOUND)
+
+        user = authenticate(username=serializer.data['username'],password=serializer.data['password'])
+       
+        if not user:
+            return Response({'message':"Invalid credentials"},status=status.HTTP_404_NOT_FOUND)
+
+        token,_ = Token.objects.get_or_create(user=user)
+        return Response({"message":"Login Successful",'token':str(token)},status=status.HTTP_201_CREATED)
+        
 
 
 
