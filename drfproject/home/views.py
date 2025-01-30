@@ -125,7 +125,10 @@ class LoginAPI(APIView):
         if not serializer.is_valid():
             return Response({'message':serializer.errors},status=status.HTTP_404_NOT_FOUND)
 
-        user = authenticate(username=serializer.data['username'],password=serializer.data['password'])
+        user = authenticate(
+        username=serializer.validated_data['username'], 
+        password=serializer.validated_data['password']
+        )
        
         if not user:
             return Response({'message':"Invalid credentials"},status=status.HTTP_404_NOT_FOUND)
