@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 
 class TeamSerializer(serializers.ModelSerializer):
-
      class Meta:
         model  = Team
         fields =['team_name']

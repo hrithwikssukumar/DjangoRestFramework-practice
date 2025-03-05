@@ -5,7 +5,6 @@ from .serializer import PersonSerializer,RegisterSerializer,LoginSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth import authenticate
-
 from rest_framework.views import APIView
 from rest_framework import viewsets
 
@@ -88,8 +87,7 @@ def person(request):
             raise Http404("Person not found")
         obj.delete()
         return Response({'message': "Your data is deleted"})
-
-    
+   
 class PersonViewSets(viewsets.ModelViewSet):
     serializer_class = PersonSerializer
     queryset = Person.objects.all()  
@@ -101,8 +99,6 @@ class PersonViewSets(viewsets.ModelViewSet):
             queryset =queryset.filter(name__startswith =search)
         serializer = PersonSerializer(queryset,many=True)
         return Response({'status':200,'data':serializer.data})    
-
-
 
 class RegisterAPI(APIView):
 
