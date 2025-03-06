@@ -9,7 +9,6 @@ class TeamSerializer(serializers.ModelSerializer):
         model  = Team
         fields =['team_name']
         
-
 class PersonSerializer(serializers.ModelSerializer):
     team =TeamSerializer()
     team_info = serializers.SerializerMethodField()
