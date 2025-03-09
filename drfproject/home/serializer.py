@@ -55,8 +55,6 @@ class RegisterSerializer(serializers.Serializer):
         )
         return validated_data
 
-
-
 class LoginSerializer(serializers.Serializer):
 
     username = serializers.CharField()
