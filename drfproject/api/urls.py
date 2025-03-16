@@ -6,7 +6,6 @@ router = DefaultRouter()
 router.register(r'person',PersonViewSets,basename='Person')
 urlpatterns = router.urls
 
-
 urlpatterns = [
     path('',include(router.urls)),
     path('index/', index,name='index'),

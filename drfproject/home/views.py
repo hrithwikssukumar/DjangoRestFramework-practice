@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import viewsets
 
-
 class ClassPerson(APIView):
     
     def get(self,request):
